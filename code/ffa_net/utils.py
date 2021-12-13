@@ -85,3 +85,13 @@ def show_video(video_path):
             break
     vid_capture.release()
     cv2.destroyAllWindows()
+    
+def generate_video(img_array, save_path):
+    
+    size = img_array.shape[1:3]
+    out = cv2.VideoWriter(save_path,cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+
+    for i in range(len(img_array)):
+        out.write(img_array[i])
+    out.release()
+    print('Generate Done!')
