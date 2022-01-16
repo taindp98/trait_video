@@ -1,6 +1,5 @@
 *.mp4
 *.jpg
 *.pth
-*.txt
 *.mov
 .ipynb_checkpoints
