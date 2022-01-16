@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[24]:
 
 
 import cv2;
@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 # from config import config
 
 
-# In[14]:
+# In[44]:
 
 
 def extract_dark_channel(im,config):
@@ -75,8 +75,9 @@ def Guidedfilter(im,et,config):
     q = mean_a*im + mean_b;
     return q;
 
-def refine_depth_map(im,et, config):
-    gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY);
+def refine_depth_map(img_path,et, config):
+    img = cv2.imread(img_path)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY);
     gray = np.float64(gray)/255;
     t = Guidedfilter(gray,et,config);
 
@@ -93,18 +94,22 @@ def recover(im,t,A,config):
     
 
 
-# In[20]:
+# In[45]:
 
 
 def dehaze(img_path, config):
     I = cv2.imread(img_path);
-    I = I.astype('float64')/255;
+    I = I/255.;
     dark = extract_dark_channel(I,config);
     A = estimate_atmospheric(I,dark);
     te = estimate_depth_map(I,A,config);
-    t = refine_depth_map(src,te, config);
-    J = recover(I,t,A,config)*255
-    J = J.astype(int)
+    t = refine_depth_map(img_path,te, config);
+    J = (recover(I,t,A,config)*255).astype(np.uint8)
     return J
 
+
+# In[47]:
+
+
+# get_ipython().system('jupyter nbconvert --to script dehaze.ipynb')
 
