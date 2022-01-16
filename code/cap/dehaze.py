@@ -11,7 +11,7 @@ import numpy as np
 import scipy
 import scipy.ndimage
 import matplotlib.pyplot as plt
-from config import config
+# from config import config
 
 
 # In[2]:
