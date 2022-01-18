@@ -75,8 +75,9 @@ def Guidedfilter(im,et,config):
     q = mean_a*im + mean_b;
     return q;
 
-def refine_depth_map(img_path,et, config):
-    img = cv2.imread(img_path)
+# def refine_depth_map(img_path,et, config):
+def refine_depth_map(img, et, config):
+#     img = cv2.imread(img_path)
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY);
     gray = np.float64(gray)/255;
     t = Guidedfilter(gray,et,config);
@@ -97,14 +98,15 @@ def recover(im,t,A,config):
 # In[45]:
 
 
-def dehaze(img_path, config):
-    I = cv2.imread(img_path);
-    I = I/255.;
-    dark = extract_dark_channel(I,config);
-    A = estimate_atmospheric(I,dark);
-    te = estimate_depth_map(I,A,config);
-    t = refine_depth_map(img_path,te, config);
-    J = (recover(I,t,A,config)*255).astype(np.uint8)
+def dehaze(I, config):
+#     I = cv2.imread(img_path);
+    I_norm = I.copy()
+    I_norm = I_norm/255.
+    dark = extract_dark_channel(I_norm,config)
+    A = estimate_atmospheric(I_norm,dark)
+    te = estimate_depth_map(I_norm,A,config)
+    t = refine_depth_map(I, te, config)
+    J = (recover(I_norm,t,A,config)*255).astype(np.uint8)
     return J
 
 

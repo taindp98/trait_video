@@ -207,19 +207,22 @@ def recover(I, tR, atm):
     J[:, :, 2] = J[:, :, 2]  + atm[0, 2]
     
     J = J*255
-    J = J.astype(int)
+    J = J.astype(np.uint8)
     return J
 
 
 # In[5]:
 
 
-def dehaze(img_path, config):
-    I = cv2.imread(img_path)
+def dehaze(I, config):
+#     I = cv2.imread(img_path)
+
     depth_region, depth_pixel = extract_depth_map(I, config)
     guided_filter = GuidedFilter(I, config['gimfiltR'], config['eps'])
     depth_region_refine = guided_filter.filter(depth_region)
     tR = np.exp(-config['beta'] * depth_region_refine)
+#     print('depth_region_refine: ',np.mean(depth_region_refine))
+#     print('tR: ',np.mean(tR))
     atm = estimate_atmospheric(I, depth_region_refine)
     J = recover(I, tR, atm)
     return J
@@ -229,7 +232,8 @@ def dehaze(img_path, config):
 
 
 if __name__ == 'main':
-    iimg = '../../data/aerial.png'
+    img_path = '../../data/aerial.png'
+    iimg = cv2.imread(img_path)
     plt.imshow(dehaze(iimg, config))
 
 

@@ -1,7 +1,7 @@
 config = {}
 config['cap'] = {}
 config['cap']['r'] = 15 
-config['cap']['beta'] = 1.0
+config['cap']['beta'] = 0.85
 config['cap']['gimfiltR'] = 60 
 config['cap']['eps'] = 1e-3
 config['cap']['theta_0'] = 0.121779
