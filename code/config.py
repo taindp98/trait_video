@@ -11,6 +11,6 @@ config['cap']['theta_2'] = -0.780245
 config['dcp'] = {}
 config['dcp']['tx'] = 0.1
 config['dcp']['sz'] = 15
-config['dcp']['omega'] = 0.85
+config['dcp']['omega'] = 0.95
 config['dcp']['r'] = 60;
 config['dcp']['eps'] = 0.0001;
