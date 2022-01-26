@@ -16,7 +16,7 @@ import scipy
 from tqdm import tqdm
 
 
-def closed_form_laplacian(image, epsilon=1e-7, r=1):
+def closed_form_laplacian(image, epsilon=1e-4, r=1):
     h,w = image.shape[:2]
     window_area = (2*r + 1)**2
     n_vals = (w - 2*r)*(h - 2*r)*window_area**2
@@ -91,13 +91,16 @@ def soft_matting(image, trimap):
 #     trimap = np.array(Image.open(trimap_path).convert(  "L"))/255.0
 
     # make matting laplacian
+    print('image', image.shape, np.min(image), np.max(image))
     i,j,v = closed_form_laplacian(image)
+    print('i, j, v', i.shape, np.min(i), np.max(i))
     h,w = trimap.shape
     L = scipy.sparse.csr_matrix((v, (i, j)), shape=(w*h, w*h))
 
     # build linear system
     A, b = make_system(L, trimap)
-
+    print('A,b')
+    print(A,b)
     # solve sparse linear system
     print("solving linear system...")
     alpha = scipy.sparse.linalg.spsolve(A, b).reshape(h, w)
@@ -114,7 +117,8 @@ def soft_matting(image, trimap):
 #     Image.fromarray(cutout).save(cutout_path)
 #     Image.fromarray(alpha ).show()
 #     Image.fromarray(cutout).show()
-#     plt.imshow(alpha)
+    plt.imshow(alpha)
+    print(alpha.shape, np.min(alpha), np.max(alpha))
     return alpha
 
 
