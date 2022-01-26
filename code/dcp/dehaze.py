@@ -191,10 +191,10 @@ def refine_depth_map(img, et, config):
 #     img = cv2.imread(img_path)
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     gray = np.float64(gray)/255
-#     t = Guidedfilter(gray,et,config);
-    img_norm = img.copy()
-    img_norm = np.float64(img_norm)/255 
-    t = soft_matting(img_norm, et)
+    t = Guidedfilter(gray,et,config);
+#     img_norm = img.copy()
+#     img_norm = np.float64(img_norm)/255 
+#     t = soft_matting(img_norm, et)
     return t;
 
 def recover(im,t,A,config):
