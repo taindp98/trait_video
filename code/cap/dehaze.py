@@ -219,7 +219,6 @@ def dehaze(I, config):
     """
     CAP
     """
-#     I = cv2.imread(img_path)
     t1 = timeit.default_timer()
     depth_region, depth_pixel = extract_depth_map(I, config)
     t2 = timeit.default_timer()
@@ -227,20 +226,32 @@ def dehaze(I, config):
     depth_region_refine = guided_filter.filter(depth_region)
     t3 = timeit.default_timer()
     tR = np.exp(-config['beta'] * depth_region_refine)
-#     print('depth_region_refine: ',np.mean(depth_region_refine))
-#     print('tR: ',np.mean(tR))
     atm = estimate_atmospheric(I, depth_region_refine)
     t4 = timeit.default_timer()
-#     print('atm: ',atm)
     J = recover(I, tR, atm)
     t5 = timeit.default_timer()
-#     dict_time = {}
-#     dict_time['ext_dm'] = t2 - t1
-#     dict_time['ref_dm'] = t3 - t2
-#     dict_time['est_atm'] = t4 - t3    
-#     dict_time['rec_rad'] = t5 - t4
-#     print(dict_time)
     return J
+
+def dehaze_video(I, config, g_atm, bov = False, mu = 0.4):
+    """
+    CAP
+    """
+    t1 = timeit.default_timer()
+    depth_region, depth_pixel = extract_depth_map(I, config)
+    t2 = timeit.default_timer()
+    guided_filter = GuidedFilter(I, config['gimfiltR'], config['eps'])
+    depth_region_refine = guided_filter.filter(depth_region)
+    t3 = timeit.default_timer()
+    tR = np.exp(-config['beta'] * depth_region_refine)
+    atm = estimate_atmospheric(I, depth_region_refine)
+    if bov:
+        g_atm = atm
+    else:
+        g_atm = mu*g_atm + (1-mu)*atm
+    t4 = timeit.default_timer()
+    J = recover(I, tR, g_atm)
+    t5 = timeit.default_timer()
+    return J, g_atm
 
 
 # In[6]:

@@ -22,10 +22,10 @@ def extract_dark_channel(im,config):
     """
     b,g,r = cv2.split(im)
     dc = cv2.min(cv2.min(r,g),b)
-    print('dc', dc.shape)
+#     print('dc', dc.shape)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(config['sz'],config['sz']))
     dark = cv2.erode(dc,kernel)
-    print('dark', dark.shape)
+#     print('dark', dark.shape)
     return dark
 
 def estimate_atmospheric(im,dark):
@@ -124,6 +124,33 @@ def dehaze(I, config):
     avg_trans = np.mean(te)
     
     return J
+
+def dehaze_video(I, config, g_atm, bov = False, mu = 0.4):
+    """
+    DCP using global atmospheric
+    """
+    I_norm = I.copy()
+    I_norm = I_norm/255.
+    t1 = timeit.default_timer()
+    dark = extract_dark_channel(I_norm,config)
+    t2 = timeit.default_timer()
+    atm = estimate_atmospheric(I_norm,dark)
+    if bov:
+        g_atm = atm
+    else:
+#         print(f'g_atm: {g_atm}; atm: {atm}')
+        g_atm = mu*g_atm + (1-mu)*atm
+    t3 = timeit.default_timer()
+    te = estimate_depth_map(I_norm, g_atm, config)
+    t4 = timeit.default_timer()
+    t = refine_depth_map(I, te, config)
+    t5 = timeit.default_timer()
+    J = (recover(I_norm,t, g_atm, config)*255).astype(np.uint8)
+    t6 = timeit.default_timer()
+    avg_trans = np.mean(te)
+    
+    return J, g_atm
+
 
 if __name__ == 'main':
     img_path = '../../data/aerial.png'
