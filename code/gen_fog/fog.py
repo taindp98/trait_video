@@ -162,7 +162,7 @@ def generate_fog(img_path, depth_path):
     # Ial[:, :, 0] = 240
     # Ial[:, :, 1] = 240
     # Ial[:, :, 2] = 240
-    print('Opacity: ',O.min(), O.max())
+#     print('Opacity: ',O.min(), O.max())
 
     result[:, :, 0] = I[:, :, 0] + O * Ial[:, :, 0]
     result[:, :, 1] = I[:, :, 1] + O * Ial[:, :, 1]

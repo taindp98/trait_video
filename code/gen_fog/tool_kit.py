@@ -29,7 +29,9 @@ def elevation_and_distance_estimation(src, depth, vertical_fov, horizontal_angle
     img = cv2.imread(src)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-    img_dpi = get_image_info(src)
+#     img_dpi = get_image_info(src)
+    img_dpi = (72,72)
+#     print(img_dpi)
     height, width = img.shape[:2]
     altitude = np.empty((height, width))
     distance = np.empty((height, width))

@@ -1,18 +1,18 @@
+import cv2
 import numpy as np
 
-def divide_blocks(I, b_size = 16):
+def resize_aspect_ratio(img, size = 1280, interp=cv2.INTER_LINEAR):
     """
-    I is the image function
+    resize image and keep aspect ratio
     """
-    sizeX = I.shape[1]
-    sizeY = I.shape[0]
-    
-    list_roi = []
-    
-    for i in range(0,int(sizeY/b_size)):
-        for j in range(0, int(sizeX/b_size)):
-            roi = I[int(i*b_size):int(i*b_size + b_size),
-                    int(j*b_size):int(j*b_size + b_size):,]
-            list_roi.append(roi)
-    array_roi = np.array(list_roi)
-    return array_roi
+    if len(img.shape) == 2:
+        h,w = img.shape
+    elif len(img.shape) == 3:
+        h,w,_ = img.shape
+    else:
+        return None
+
+    new_w = size
+    new_h = h*new_w//w    
+    img_rs = cv2.resize(img.copy(), (new_w, new_h), interpolation=interp)
+    return img_rs
