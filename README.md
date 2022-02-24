@@ -1,4 +1,4 @@
-# trait_video
+# Trait_video
 Analyse et traitement vidéo - M2 3IR- USPN
 ## Dehazing methods
 We propose two methods for dehazing: Priors based method & Hybrid based method
@@ -16,7 +16,7 @@ We propose two methods for dehazing: Priors based method & Hybrid based method
 + Dehaze input from Atmospheric A and refined depth map (beta=1).
 ## Dehazing video
 ./code/main_dehaze_video.ipynb
-+ Dehazing video by apply both above method
++ Dehazing video by applying both above methods.
 + Consider two cases: With and without global atmospheric value.
 ## Evaluation dehazed video
 ./code/evaluation.ipynb
