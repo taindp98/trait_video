@@ -1,4 +1,4 @@
-# Trait_video
+# Analyse et Traitement Vidéo
 Analyse et traitement vidéo - M2 3IR- USPN
 | Prénom   |      NOM      |  Nombre etudiant |
 |----------|:-------------:|------:|
